@@ -3,6 +3,7 @@ using PlayFab.ClientModels;
 using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class PlayFabAuthManager : MonoBehaviour
 {
@@ -110,7 +111,7 @@ public class PlayFabAuthManager : MonoBehaviour
     {
         activeStatusText.text = "Connexion réussie!";
 
-        // SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene("MainScene");
 
         GetUserData();
     }
@@ -130,7 +131,7 @@ public class PlayFabAuthManager : MonoBehaviour
             //UserDataManager.Instance.TotalPoints = points;
         }
 
-        // SceneManager.LoadScene("MainScene");
+         SceneManager.LoadScene("MainScene");
     }
 
     void OnError(PlayFabError error)
