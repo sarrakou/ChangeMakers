@@ -84,9 +84,9 @@ public class LocationConfigManager : MonoBehaviour
         {
             actionId = "action_" + locationConfigs.Count,
             actionName = "Acción Eco " + locationConfigs.Count,
-            latitude = 48.8566f,  // París como ejemplo
-            longitude = 2.3522f,
-            radiusInMeters = 100f
+            latitude = 48.8476855f,  // París como ejemplo
+            longitude = 2.3872314f,
+            radiusInMeters = 2000f
         });
     }
 #endif

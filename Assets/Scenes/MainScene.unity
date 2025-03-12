@@ -1683,7 +1683,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.3435972}
-  m_AnchoredPosition: {x: -233, y: 13.999985}
+  m_AnchoredPosition: {x: -233, y: 14}
   m_SizeDelta: {x: -606, y: -42}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &85483308
@@ -8838,7 +8838,6 @@ MonoBehaviour:
   badgesText: {fileID: 1002982124}
   locationStatusText: {fileID: 890656745}
   locationValidator: {fileID: 577008804}
-  requireLocationValidation: 1
   infoActions: {fileID: 577008803}
   pointsPerAction: 1
 --- !u!4 &577008802
@@ -8872,6 +8871,7 @@ MonoBehaviour:
   descriptionText: {fileID: 283946584}
   challengeImage: {fileID: 1412794617}
   actionID: 
+  requireLocationValidation: 0
 --- !u!114 &577008804
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15934,7 +15934,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.3435972}
-  m_AnchoredPosition: {x: 237, y: 13.999985}
+  m_AnchoredPosition: {x: 237, y: 14}
   m_SizeDelta: {x: -606, y: -42}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1082979716
@@ -16400,7 +16400,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1888340637}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.78765607
+  m_Size: 0.7216954
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

@@ -16,11 +16,10 @@ public class CameraCapture : MonoBehaviour
     [SerializeField] private TMP_Text pointsText;
     [SerializeField] private TMP_Text levelText;
     [SerializeField] private TMP_Text badgesText;
-    [SerializeField] private TMP_Text locationStatusText; // Nuevo texto para mostrar estado de ubicaci�n
+    [SerializeField] private TMP_Text locationStatusText; 
 
-    // Referencia al validador de ubicaci�n
-    [SerializeField] private LocationValidator locationValidator;
-    [SerializeField] private bool requireLocationValidation = true; // Activar/desactivar validaci�n
+  
+    [SerializeField] private LocationValidator locationValidator;     
 
     [SerializeField]private InfoActionsChallenges infoActions;
     private string currentPhotoPath;
@@ -37,9 +36,9 @@ public class CameraCapture : MonoBehaviour
         UpdateUI();
 
         // Verificar componente de validaci�n
-        if (requireLocationValidation && locationValidator == null)
+        if (infoActions.requireLocationValidation && locationValidator == null)
         {
-            Debug.LogError("LocationValidator no est� asignado pero se requiere validaci�n de ubicaci�n");
+            Debug.LogError("LocationValidator no esta asignado pero se requiere validacion de ubicacion");
             locationStatusText.text = "Error: Validador de ubicaci�n no configurado";
         }
     }
@@ -80,8 +79,7 @@ public class CameraCapture : MonoBehaviour
 
     public void CaptureAction()
     {
-        // Validar ubicaci�n si es necesario
-        if (requireLocationValidation && locationValidator != null)
+        if (infoActions.requireLocationValidation && locationValidator != null)
         {
             if (!locationValidator.IsLocationValid())
             {
@@ -302,12 +300,11 @@ public class CameraCapture : MonoBehaviour
         {
             Data = new Dictionary<string, string>
             {
-                // Store metadata
-
+                
                 {"EcoAction_" + infoActions.actionID + "_HasPhoto", "true"},
                 {"EcoAction_" + infoActions.actionID + "_PhotoTimestamp", timestamp},
                 {"EcoAction_" + infoActions.actionID + "_PhotoLocalPath", currentPhotoPath},
-                // Agregar informaci�n de ubicaci�n
+                
                 {"EcoAction_" + infoActions.actionID + "_LocationValid", locationValid.ToString()},
                 {"EcoAction_" + infoActions.actionID + "_Latitude", latitude.ToString()},
                 {"EcoAction_" + infoActions.actionID + "_Longitude", longitude.ToString()},

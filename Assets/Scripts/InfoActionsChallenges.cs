@@ -11,6 +11,7 @@ public class InfoActionsChallenges : MonoBehaviour
     public TextMeshProUGUI descriptionText;
     public Image challengeImage;
     public string actionID;
+    public bool requireLocationValidation = false;
 
     // Fonction pour mettre à jour l'UI avec une action
     private void UpdateUI(string title, string description, string imageName)
@@ -27,6 +28,8 @@ public class InfoActionsChallenges : MonoBehaviour
                  "Prends une photo avant/après d’un déchet que tu as ramassé et mis dans la poubelle.",
                  "dechet");
         actionID = "ramasserDechet";
+
+        requireLocationValidation = false;
     }
 
     public void Action_ApporterSac()
@@ -36,6 +39,7 @@ public class InfoActionsChallenges : MonoBehaviour
                  "sac_reutilisable");
 
         actionID = "ApporterSac";
+        requireLocationValidation = false;
     }
 
     public void Action_EteindreLumieres()
@@ -45,6 +49,7 @@ public class InfoActionsChallenges : MonoBehaviour
                  "lumiere");
 
         actionID = "EteindreLumiere";
+        requireLocationValidation = false;
     }
 
     public void Action_UtiliserGourde()
@@ -54,6 +59,7 @@ public class InfoActionsChallenges : MonoBehaviour
                  "gourde");
 
         actionID = "UtiliserGourde";
+        requireLocationValidation = false;
     }
 
     public void Action_PrendreTransport()
@@ -63,6 +69,7 @@ public class InfoActionsChallenges : MonoBehaviour
                  "velo");
 
         actionID = "PrendreTransport";
+        requireLocationValidation = false;
     }
 
     public void Action_Recycler()
@@ -72,6 +79,7 @@ public class InfoActionsChallenges : MonoBehaviour
                  "recyclage");
 
         actionID = "Recycler";
+        requireLocationValidation = false;
     }
 
     // Challenges
@@ -80,6 +88,7 @@ public class InfoActionsChallenges : MonoBehaviour
         UpdateUI("Journée zéro plastique ",
                  "Prends une photo de tous les objets réutilisables que tu as utilisés au lieu de plastique jetable.",
                  "zero_plastique");
+        requireLocationValidation = true;
     }
 
     public void Challenge_NettoyageCollectif()
@@ -87,6 +96,8 @@ public class InfoActionsChallenges : MonoBehaviour
         UpdateUI("Nettoyage collectif ",
                  "Fais une photo avec un groupe d’amis en train de nettoyer un parc, une plage ou une rue.",
                  "nettoyage");
+
+        requireLocationValidation = true;
     }
 
     public void Challenge_ObjetRecyclé()
@@ -94,6 +105,8 @@ public class InfoActionsChallenges : MonoBehaviour
         UpdateUI("Créer un objet recyclé ",
                  "Prends une photo avant/après d’un objet que tu as transformé à partir de matériaux recyclés.",
                  "objet_recycle");
+
+        requireLocationValidation = true;
     }
 
     public void Challenge_RepasVegetarien()
@@ -101,5 +114,7 @@ public class InfoActionsChallenges : MonoBehaviour
         UpdateUI("Un repas 100% végétarien ",
                  "Prends une photo de ton assiette avec un repas végétarien préparé par toi-même.",
                  "repas_vege");
+
+        requireLocationValidation = true;
     }
 }
