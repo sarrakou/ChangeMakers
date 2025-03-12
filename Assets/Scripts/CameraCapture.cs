@@ -14,16 +14,20 @@ public class CameraCapture : MonoBehaviour
     [SerializeField] private Image photoDisplayImage;
     [SerializeField] private Image SecondPhotoDisplayImage;
     [SerializeField] private TMP_Text actionDescriptionText;
+    [SerializeField] private TMP_Text points;
 
-    private string actionId; // Unique ID for this eco-action
-    private string currentPhotoPath; // Local path to the stored photo
+    private string actionId; 
+    private string currentPhotoPath; 
     private Texture2D currentPhotoTexture;
+
+    public int totalPoints = 0;
 
     void Start()
     {
         captureButton.onClick.AddListener(CaptureAction);
         // Load existing photo if available
         LoadExistingPhoto();
+        points.text = totalPoints + " point(s)";
     }
 
     public void SetActionDetails(string id, string description)
@@ -80,6 +84,7 @@ public class CameraCapture : MonoBehaviour
 
         // Update PlayFab with photo information
         UpdatePhotoInfoInPlayFab();
+        points.text = (totalPoints+1)+" point(s)";
     }
 
     private void SavePhotoLocally(string originalPath)
@@ -138,6 +143,7 @@ public class CameraCapture : MonoBehaviour
                 {"EcoAction_" + actionId + "_HasPhoto", "true"},
                 {"EcoAction_" + actionId + "_PhotoTimestamp", timestamp},
                 {"EcoAction_" + actionId + "_PhotoLocalPath", currentPhotoPath},
+                {"TotalPoints", (totalPoints +1).ToString()}
             }
         };
 
