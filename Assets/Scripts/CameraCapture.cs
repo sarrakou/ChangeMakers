@@ -32,7 +32,7 @@ public class CameraCapture : MonoBehaviour
         LoadExistingPhoto();
     }
 
-    private void CaptureAction()
+    public void CaptureAction()
     {
         PermissionStatus permissionStatus = (PermissionStatus)NativeCamera.CheckPermission(true);
         if (permissionStatus == PermissionStatus.Denied)
