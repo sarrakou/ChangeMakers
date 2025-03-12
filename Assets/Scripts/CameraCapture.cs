@@ -5,7 +5,6 @@ using PlayFab;
 using PlayFab.ClientModels;
 using System.Collections.Generic;
 using TMPro;
-using UnityEngine.Android;
 using Unity.Notifications.Android;
 
 public class CameraCapture : MonoBehaviour
