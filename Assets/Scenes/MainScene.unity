@@ -3158,7 +3158,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: First challenge
+  m_text: "Un repas 100% v\xE9g\xE9tarien"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 15d8ea85b5a0b6b46be89358a2c743d6, type: 2}
   m_sharedMaterial: {fileID: 6803118070661425226, guid: 15d8ea85b5a0b6b46be89358a2c743d6, type: 2}
@@ -3757,7 +3757,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: First challenge
+  m_text: "Cr\xE9er un objet recycl\xE9"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 15d8ea85b5a0b6b46be89358a2c743d6, type: 2}
   m_sharedMaterial: {fileID: 6803118070661425226, guid: 15d8ea85b5a0b6b46be89358a2c743d6, type: 2}
@@ -6426,7 +6426,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: First action
+  m_text: Apporter son propre sac
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 15d8ea85b5a0b6b46be89358a2c743d6, type: 2}
   m_sharedMaterial: {fileID: 6803118070661425226, guid: 15d8ea85b5a0b6b46be89358a2c743d6, type: 2}
@@ -7283,7 +7283,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.000026703}
+  m_AnchoredPosition: {x: 0, y: 0.000030517578}
   m_SizeDelta: {x: -70, y: -85.3599}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &514267022
@@ -10712,7 +10712,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: First action
+  m_text: Utiliser une gourde
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 15d8ea85b5a0b6b46be89358a2c743d6, type: 2}
   m_sharedMaterial: {fileID: 6803118070661425226, guid: 15d8ea85b5a0b6b46be89358a2c743d6, type: 2}
@@ -12890,7 +12890,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: First action
+  m_text: Recycler correctement
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 15d8ea85b5a0b6b46be89358a2c743d6, type: 2}
   m_sharedMaterial: {fileID: 6803118070661425226, guid: 15d8ea85b5a0b6b46be89358a2c743d6, type: 2}
@@ -14134,7 +14134,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: First challenge
+  m_text: Nettoyage collectif
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 15d8ea85b5a0b6b46be89358a2c743d6, type: 2}
   m_sharedMaterial: {fileID: 6803118070661425226, guid: 15d8ea85b5a0b6b46be89358a2c743d6, type: 2}
@@ -14483,7 +14483,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: First action
+  m_text: "\xC9teindre les lumi\xE8res"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 15d8ea85b5a0b6b46be89358a2c743d6, type: 2}
   m_sharedMaterial: {fileID: 6803118070661425226, guid: 15d8ea85b5a0b6b46be89358a2c743d6, type: 2}
@@ -18115,7 +18115,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: First challenge
+  m_text: "Journ\xE9e z\xE9ro plastique"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 15d8ea85b5a0b6b46be89358a2c743d6, type: 2}
   m_sharedMaterial: {fileID: 6803118070661425226, guid: 15d8ea85b5a0b6b46be89358a2c743d6, type: 2}
@@ -18383,7 +18383,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: First action
+  m_text: "Prendre les transports en commun ou le v\xE9lo"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 15d8ea85b5a0b6b46be89358a2c743d6, type: 2}
   m_sharedMaterial: {fileID: 6803118070661425226, guid: 15d8ea85b5a0b6b46be89358a2c743d6, type: 2}
@@ -23528,7 +23528,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: First action
+  m_text: "Ramasser un d\xE9chet "
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 15d8ea85b5a0b6b46be89358a2c743d6, type: 2}
   m_sharedMaterial: {fileID: 6803118070661425226, guid: 15d8ea85b5a0b6b46be89358a2c743d6, type: 2}
