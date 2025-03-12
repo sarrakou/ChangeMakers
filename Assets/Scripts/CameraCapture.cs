@@ -202,7 +202,7 @@ public class CameraCapture : MonoBehaviour
                 isValid = true
             });
 
-            string metadataPath = Path.Combine(Application.persistentDataPath, "eco_action_" + actionId + "_location.json");
+            string metadataPath = Path.Combine(Application.persistentDataPath, "eco_action_" + infoActions.actionID + "_location.json");
             File.WriteAllText(metadataPath, metadataJson);
 
             Debug.Log("Metadatos de ubicaci�n guardados en: " + metadataPath);
@@ -304,14 +304,14 @@ public class CameraCapture : MonoBehaviour
             {
                 // Store metadata
 
-                {"EcoAction_" + actionId + "_HasPhoto", "true"},
-                {"EcoAction_" + actionId + "_PhotoTimestamp", timestamp},
-                {"EcoAction_" + actionId + "_PhotoLocalPath", currentPhotoPath},
+                {"EcoAction_" + infoActions.actionID + "_HasPhoto", "true"},
+                {"EcoAction_" + infoActions.actionID + "_PhotoTimestamp", timestamp},
+                {"EcoAction_" + infoActions.actionID + "_PhotoLocalPath", currentPhotoPath},
                 // Agregar informaci�n de ubicaci�n
-                {"EcoAction_" + actionId + "_LocationValid", locationValid.ToString()},
-                {"EcoAction_" + actionId + "_Latitude", latitude.ToString()},
-                {"EcoAction_" + actionId + "_Longitude", longitude.ToString()},
-                {"EcoAction_" + actionId + "_LocationTimestamp", timestamp}
+                {"EcoAction_" + infoActions.actionID + "_LocationValid", locationValid.ToString()},
+                {"EcoAction_" + infoActions.actionID + "_Latitude", latitude.ToString()},
+                {"EcoAction_" + infoActions.actionID + "_Longitude", longitude.ToString()},
+                {"EcoAction_" + infoActions.actionID + "_LocationTimestamp", timestamp}
 
             }
         };
