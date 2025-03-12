@@ -8836,9 +8836,11 @@ MonoBehaviour:
   pointsText: {fileID: 1265074792}
   levelText: {fileID: 215322683}
   badgesText: {fileID: 1002982124}
+
   locationStatusText: {fileID: 890656745}
   locationValidator: {fileID: 577008805}
   requireLocationValidation: 1
+
   pointsPerAction: 1
 --- !u!4 &577008802
 Transform:
@@ -8870,7 +8872,7 @@ MonoBehaviour:
   titleText: {fileID: 1528869690}
   descriptionText: {fileID: 283946584}
   challengeImage: {fileID: 1412794617}
---- !u!114 &577008804
+
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8885,22 +8887,7 @@ MonoBehaviour:
   locationConfigs: []
   locationValidator: {fileID: 577008805}
   cameraCapture: {fileID: 577008801}
---- !u!114 &577008805
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 577008800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e9ee369a94a5924089c09c776b78255, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetLatitude: 48.8566
-  targetLongitude: 2.3522
-  acceptableDistanceInMeters: 100
-  locationStatusText: {fileID: 890656745}
+
 --- !u!1 &579927843
 GameObject:
   m_ObjectHideFlags: 0
