@@ -9281,6 +9281,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   captureButton: {fileID: 317615727}
   photoDisplayImage: {fileID: 1888513090}
+  SecondPhotoDisplayImage: {fileID: 809842546}
   actionDescriptionText: {fileID: 1528869690}
 --- !u!4 &577008802
 Transform:
@@ -21362,7 +21363,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1565831803
 RectTransform:
   m_ObjectHideFlags: 0

@@ -12,6 +12,7 @@ public class CameraCapture : MonoBehaviour
 {
     [SerializeField] private Button captureButton;
     [SerializeField] private Image photoDisplayImage;
+    [SerializeField] private Image SecondPhotoDisplayImage;
     [SerializeField] private TMP_Text actionDescriptionText;
 
     private string actionId; // Unique ID for this eco-action
@@ -72,6 +73,7 @@ public class CameraCapture : MonoBehaviour
             new Vector2(0.5f, 0.5f)
         );
         photoDisplayImage.sprite = photoSprite;
+        SecondPhotoDisplayImage.sprite = photoSprite;
 
         // Save locally with action ID in filename
         SavePhotoLocally(path);
@@ -117,6 +119,7 @@ public class CameraCapture : MonoBehaviour
                 new Vector2(0.5f, 0.5f)
             );
             photoDisplayImage.sprite = photoSprite;
+            SecondPhotoDisplayImage.sprite = photoSprite;
         }
     }
 
