@@ -8833,6 +8833,7 @@ MonoBehaviour:
   pointsText: {fileID: 1265074792}
   levelText: {fileID: 215322683}
   badgesText: {fileID: 1002982124}
+  infoActions: {fileID: 577008803}
   pointsPerAction: 1
 --- !u!4 &577008802
 Transform:
@@ -8864,6 +8865,7 @@ MonoBehaviour:
   titleText: {fileID: 1528869690}
   descriptionText: {fileID: 283946584}
   challengeImage: {fileID: 1412794617}
+  actionID: 
 --- !u!1 &579927843
 GameObject:
   m_ObjectHideFlags: 0

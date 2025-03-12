@@ -17,7 +17,7 @@ public class CameraCapture : MonoBehaviour
     [SerializeField] private TMP_Text levelText;
     [SerializeField] private TMP_Text badgesText;
 
-    private string actionId;
+    [SerializeField]private InfoActionsChallenges infoActions;
     private string currentPhotoPath;
     private Texture2D currentPhotoTexture;
 
@@ -61,7 +61,7 @@ public class CameraCapture : MonoBehaviour
 
     public void SetActionDetails(string id, string description)
     {
-        actionId = id;
+        infoActions.actionID = id;
         actionDescriptionText.text = description;
         LoadExistingPhoto();
     }
@@ -123,7 +123,7 @@ public class CameraCapture : MonoBehaviour
         photoDisplayImage.sprite = photoSprite;
         SecondPhotoDisplayImage.sprite = photoSprite;
 
-        string mockPath = Path.Combine(Application.persistentDataPath, "mock_eco_action_" + actionId + ".jpg");
+        string mockPath = Path.Combine(Application.persistentDataPath, "mock_eco_action_" + infoActions.actionID + ".jpg");
         File.WriteAllBytes(mockPath, currentPhotoTexture.EncodeToPNG());
         currentPhotoPath = mockPath;
 
@@ -154,11 +154,11 @@ public class CameraCapture : MonoBehaviour
 
     private void AwardPointsForAction()
     {
-        bool alreadyCompleted = PlayerPrefs.HasKey("EcoAction_" + actionId + "_Completed");
+        bool alreadyCompleted = PlayerPrefs.HasKey("EcoAction_" + infoActions.actionID + "_Completed");
 
         if (!alreadyCompleted)
         {
-            PlayerPrefs.SetInt("EcoAction_" + actionId + "_Completed", 1);
+            PlayerPrefs.SetInt("EcoAction_" + infoActions.actionID + "_Completed", 1);
             PlayerPrefs.Save();
 
             if (PlayFabAuthManager.Instance != null)
@@ -173,7 +173,7 @@ public class CameraCapture : MonoBehaviour
                 Debug.LogError("PlayFabAuthManager instance not found, cannot award points!");
             }
 
-            Debug.Log("Awarded " + pointsPerAction + " point(s) for eco action " + actionId);
+            Debug.Log("Awarded " + pointsPerAction + " point(s) for eco action " + infoActions.actionID);
         }
         else
         {
@@ -185,13 +185,13 @@ public class CameraCapture : MonoBehaviour
 
     private void SavePhotoLocally(string originalPath)
     {
-        string fileName = "eco_action_" + actionId + ".jpg";
+        string fileName = "eco_action_" + infoActions.actionID + ".jpg";
         string destinationPath = Path.Combine(Application.persistentDataPath, fileName);
 
         File.Copy(originalPath, destinationPath, true);
         currentPhotoPath = destinationPath;
 
-        PlayerPrefs.SetString("EcoAction_" + actionId + "_PhotoPath", currentPhotoPath);
+        PlayerPrefs.SetString("EcoAction_" + infoActions.actionID + "_PhotoPath", currentPhotoPath);
         PlayerPrefs.Save();
 
         Debug.Log("Eco action photo saved locally at: " + currentPhotoPath);
@@ -199,7 +199,7 @@ public class CameraCapture : MonoBehaviour
 
     private void LoadExistingPhoto()
     {
-        string storedPath = PlayerPrefs.GetString("EcoAction_" + actionId + "_PhotoPath", "");
+        string storedPath = PlayerPrefs.GetString("EcoAction_" + infoActions.actionID + "_PhotoPath", "");
 
         if (!string.IsNullOrEmpty(storedPath) && File.Exists(storedPath))
         {
@@ -228,9 +228,9 @@ public class CameraCapture : MonoBehaviour
             Data = new Dictionary<string, string>
             {
                 // Store metadata
-                {"EcoAction_" + actionId + "_HasPhoto", "true"},
-                {"EcoAction_" + actionId + "_PhotoTimestamp", timestamp},
-                {"EcoAction_" + actionId + "_PhotoLocalPath", currentPhotoPath}
+                {"EcoAction_" + infoActions.actionID + "_HasPhoto", "true"},
+                {"EcoAction_" + infoActions.actionID + "_PhotoTimestamp", timestamp},
+                {"EcoAction_" + infoActions.actionID + "_PhotoLocalPath", currentPhotoPath}
             }
         };
 

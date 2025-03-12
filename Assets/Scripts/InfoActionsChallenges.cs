@@ -10,7 +10,7 @@ public class InfoActionsChallenges : MonoBehaviour
     public TextMeshProUGUI titleText;
     public TextMeshProUGUI descriptionText;
     public Image challengeImage;
-    
+    public string actionID;
 
     // Fonction pour mettre à jour l'UI avec une action
     private void UpdateUI(string title, string description, string imageName)
@@ -26,6 +26,7 @@ public class InfoActionsChallenges : MonoBehaviour
         UpdateUI("Ramasser un déchet ",
                  "Prends une photo avant/après d’un déchet que tu as ramassé et mis dans la poubelle.",
                  "dechet");
+        actionID = "ramasserDechet";
     }
 
     public void Action_ApporterSac()
@@ -33,6 +34,8 @@ public class InfoActionsChallenges : MonoBehaviour
         UpdateUI("Apporter son propre sac ",
                  "Montre-toi en train d’utiliser un sac réutilisable pour faire tes courses.",
                  "sac_reutilisable");
+
+        actionID = "ApporterSac";
     }
 
     public void Action_EteindreLumieres()
@@ -40,6 +43,8 @@ public class InfoActionsChallenges : MonoBehaviour
         UpdateUI("Éteindre les lumières ",
                  "Prends une photo avant/après d’une pièce avec la lumière allumée puis éteinte.",
                  "lumiere");
+
+        actionID = "EteindreLumiere";
     }
 
     public void Action_UtiliserGourde()
@@ -47,6 +52,8 @@ public class InfoActionsChallenges : MonoBehaviour
         UpdateUI("Utiliser une gourde ",
                  "Montre ta gourde réutilisable remplie au lieu d'une bouteille en plastique.",
                  "gourde");
+
+        actionID = "UtiliserGourde";
     }
 
     public void Action_PrendreTransport()
@@ -54,6 +61,8 @@ public class InfoActionsChallenges : MonoBehaviour
         UpdateUI("Prendre les transports en commun ou le vélo",
                  "Fais une photo de toi dans un bus, un métro, ou sur un vélo au lieu de la voiture.",
                  "velo");
+
+        actionID = "PrendreTransport";
     }
 
     public void Action_Recycler()
@@ -61,6 +70,8 @@ public class InfoActionsChallenges : MonoBehaviour
         UpdateUI("Recycler correctement ",
                  "Prends une photo en train de jeter un déchet dans la bonne poubelle de tri.",
                  "recyclage");
+
+        actionID = "Recycler";
     }
 
     // Challenges
