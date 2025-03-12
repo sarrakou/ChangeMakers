@@ -1683,7 +1683,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.3435972}
-  m_AnchoredPosition: {x: -233, y: 14}
+  m_AnchoredPosition: {x: -233, y: 13.999985}
   m_SizeDelta: {x: -606, y: -42}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &85483308
@@ -8808,8 +8808,6 @@ GameObject:
   - component: {fileID: 577008802}
   - component: {fileID: 577008801}
   - component: {fileID: 577008803}
-  - component: {fileID: 577008805}
-  - component: {fileID: 577008804}
   m_Layer: 0
   m_Name: Scripts
   m_TagString: Untagged
@@ -8836,11 +8834,10 @@ MonoBehaviour:
   pointsText: {fileID: 1265074792}
   levelText: {fileID: 215322683}
   badgesText: {fileID: 1002982124}
-
-  locationStatusText: {fileID: 890656745}
-  locationValidator: {fileID: 577008805}
+  locationStatusText: {fileID: 0}
+  locationValidator: {fileID: 0}
   requireLocationValidation: 1
-
+  infoActions: {fileID: 0}
   pointsPerAction: 1
 --- !u!4 &577008802
 Transform:
@@ -8872,22 +8869,7 @@ MonoBehaviour:
   titleText: {fileID: 1528869690}
   descriptionText: {fileID: 283946584}
   challengeImage: {fileID: 1412794617}
-
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 577008800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 383bdda2e370cb940bb31664b59b1ab8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  locationConfigs: []
-  locationValidator: {fileID: 577008805}
-  cameraCapture: {fileID: 577008801}
-
+  actionID: 
 --- !u!1 &579927843
 GameObject:
   m_ObjectHideFlags: 0
@@ -12005,7 +11987,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 0}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -15919,7 +15901,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.3435972}
-  m_AnchoredPosition: {x: 237, y: 14}
+  m_AnchoredPosition: {x: 237, y: 13.999985}
   m_SizeDelta: {x: -606, y: -42}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1082979716
@@ -16385,7 +16367,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1888340637}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.7216954
+  m_Size: 0.78765607
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -24783,8 +24765,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c8a5a5c051c07b0489d74dd74c313fa9, type: 3}
-  m_Type: 1
+  m_Sprite: {fileID: 0}
+  m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
