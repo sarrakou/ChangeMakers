@@ -17,6 +17,11 @@ public class CameraCapture : MonoBehaviour
     [SerializeField] private TMP_Text pointsText;
     [SerializeField] private TMP_Text levelText;
     [SerializeField] private TMP_Text badgesText;
+    [SerializeField] private TMP_Text locationStatusText; // Nuevo texto para mostrar estado de ubicación
+
+    // Referencia al validador de ubicación
+    [SerializeField] private LocationValidator locationValidator;
+    [SerializeField] private bool requireLocationValidation = true; // Activar/desactivar validación
 
     private string actionId;
     private string currentPhotoPath;
@@ -31,6 +36,13 @@ public class CameraCapture : MonoBehaviour
         LoadExistingPhoto();
 
         UpdateUI();
+
+        // Verificar componente de validación
+        if (requireLocationValidation && locationValidator == null)
+        {
+            Debug.LogError("LocationValidator no está asignado pero se requiere validación de ubicación");
+            locationStatusText.text = "Error: Validador de ubicación no configurado";
+        }
     }
 
     private void OnEnable()
@@ -69,6 +81,22 @@ public class CameraCapture : MonoBehaviour
 
     public void CaptureAction()
     {
+        // Validar ubicación si es necesario
+        if (requireLocationValidation && locationValidator != null)
+        {
+            if (!locationValidator.IsLocationValid())
+            {
+                // Mostrar mensaje de ubicación inválida
+                Debug.LogWarning("La ubicación actual no es válida para esta acción");
+                if (locationStatusText != null)
+                {
+                    locationStatusText.text = "¡Ubicación inválida! Debes estar en el lugar específico.";
+                    locationStatusText.color = Color.red;
+                }
+                return; // No continuar con la captura
+            }
+        }
+
         // Check if NativeCamera is available
 #if UNITY_ANDROID || UNITY_IOS
         PermissionStatus permissionStatus = (PermissionStatus)NativeCamera.CheckPermission(true);
@@ -106,7 +134,7 @@ public class CameraCapture : MonoBehaviour
         {
             colors[i] = new Color(
                 Random.Range(0.0f, 1.0f),
-                Random.Range(0.5f, 1.0f), 
+                Random.Range(0.5f, 1.0f),
                 Random.Range(0.0f, 0.5f)
             );
         }
@@ -127,6 +155,9 @@ public class CameraCapture : MonoBehaviour
         string mockPath = Path.Combine(Application.persistentDataPath, "mock_eco_action_" + actionId + ".jpg");
         File.WriteAllBytes(mockPath, currentPhotoTexture.EncodeToPNG());
         currentPhotoPath = mockPath;
+
+        // Guardar también la información de ubicación
+        SaveLocationMetadata();
 
         AwardPointsForAction();
     }
@@ -150,7 +181,39 @@ public class CameraCapture : MonoBehaviour
 
         SavePhotoLocally(path);
 
+        // Guardar también la información de ubicación
+        SaveLocationMetadata();
+
         AwardPointsForAction();
+    }
+
+    private void SaveLocationMetadata()
+    {
+        if (locationValidator != null && locationValidator.IsLocationValid())
+        {
+            LocationInfo locationInfo = locationValidator.GetCurrentLocation();
+
+            // Guardar metadatos de ubicación
+            string metadataJson = JsonUtility.ToJson(new PhotoLocationMetadata
+            {
+                latitude = locationInfo.latitude,
+                longitude = locationInfo.longitude,
+                accuracy = locationInfo.horizontalAccuracy,
+                timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                isValid = true
+            });
+
+            string metadataPath = Path.Combine(Application.persistentDataPath, "eco_action_" + actionId + "_location.json");
+            File.WriteAllText(metadataPath, metadataJson);
+
+            Debug.Log("Metadatos de ubicación guardados en: " + metadataPath);
+
+            if (locationStatusText != null)
+            {
+                locationStatusText.text = "Ubicación validada correctamente";
+                locationStatusText.color = Color.green;
+            }
+        }
     }
 
     private void AwardPointsForAction()
@@ -180,7 +243,6 @@ public class CameraCapture : MonoBehaviour
         {
             Debug.Log("This eco action was already completed before. No additional points awarded.");
         }
-
         UpdatePhotoInfoInPlayFab();
     }
 
@@ -224,6 +286,19 @@ public class CameraCapture : MonoBehaviour
         System.DateTime captureTime = System.DateTime.UtcNow;
         string timestamp = captureTime.ToString("yyyy-MM-dd HH:mm:ss");
 
+        // Incluir información de ubicación si está disponible
+        bool locationValid = false;
+        float latitude = 0;
+        float longitude = 0;
+
+        if (locationValidator != null)
+        {
+            locationValid = locationValidator.IsLocationValid();
+            LocationInfo locationInfo = locationValidator.GetCurrentLocation();
+            latitude = locationInfo.latitude;
+            longitude = locationInfo.longitude;
+        }
+
         var updateRequest = new UpdateUserDataRequest
         {
             Data = new Dictionary<string, string>
@@ -231,13 +306,18 @@ public class CameraCapture : MonoBehaviour
                 // Store metadata
                 {"EcoAction_" + actionId + "_HasPhoto", "true"},
                 {"EcoAction_" + actionId + "_PhotoTimestamp", timestamp},
-                {"EcoAction_" + actionId + "_PhotoLocalPath", currentPhotoPath}
+                {"EcoAction_" + actionId + "_PhotoLocalPath", currentPhotoPath},
+                // Agregar información de ubicación
+                {"EcoAction_" + actionId + "_LocationValid", locationValid.ToString()},
+                {"EcoAction_" + actionId + "_Latitude", latitude.ToString()},
+                {"EcoAction_" + actionId + "_Longitude", longitude.ToString()},
+                {"EcoAction_" + actionId + "_LocationTimestamp", timestamp}
             }
         };
 
         PlayFabClientAPI.UpdateUserData(updateRequest,
         result => {
-            Debug.Log("Eco action photo info updated in PlayFab");
+            Debug.Log("Eco action photo info updated in PlayFab with location data");
         },
         error => {
             Debug.LogError("Failed to update eco action photo info: " + error.ErrorMessage);
@@ -262,4 +342,15 @@ public class CameraCapture : MonoBehaviour
             Debug.LogError("Failed to get user data: " + error.ErrorMessage);
         });
     }
+}
+
+// Clase para almacenar los metadatos de ubicación de la foto
+[System.Serializable]
+public class PhotoLocationMetadata
+{
+    public float latitude;
+    public float longitude;
+    public float accuracy;
+    public string timestamp;
+    public bool isValid;
 }
