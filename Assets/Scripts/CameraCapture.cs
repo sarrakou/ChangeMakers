@@ -14,20 +14,50 @@ public class CameraCapture : MonoBehaviour
     [SerializeField] private Image photoDisplayImage;
     [SerializeField] private Image SecondPhotoDisplayImage;
     [SerializeField] private TMP_Text actionDescriptionText;
-    [SerializeField] private TMP_Text points;
+    [SerializeField] private TMP_Text pointsText;
+    [SerializeField] private TMP_Text levelText;
+    [SerializeField] private TMP_Text badgesText;
 
-    private string actionId; 
-    private string currentPhotoPath; 
+    private string actionId;
+    private string currentPhotoPath;
     private Texture2D currentPhotoTexture;
 
-    public int totalPoints = 0;
+    [SerializeField] private int pointsPerAction = 1;
 
     void Start()
     {
         captureButton.onClick.AddListener(CaptureAction);
-        // Load existing photo if available
+
         LoadExistingPhoto();
-        points.text = totalPoints + " point(s)";
+
+        UpdateUI();
+    }
+
+    private void OnEnable()
+    {
+        UpdateUI();
+    }
+
+    private void UpdateUI()
+    {
+        if (PlayFabAuthManager.Instance != null)
+        {
+            pointsText.text = PlayFabAuthManager.Instance.TotalPoints + " point(s)";
+            levelText.text = "Niveau " + PlayFabAuthManager.Instance.Level;
+
+            if (PlayFabAuthManager.Instance.Badges != null && PlayFabAuthManager.Instance.Badges.Count > 0)
+            {
+                badgesText.text = string.Join(", ", PlayFabAuthManager.Instance.Badges);
+            }
+            else
+            {
+                badgesText.text = "Aucun badge";
+            }
+        }
+        else
+        {
+            Debug.LogWarning("PlayFabAuthManager instance not found!");
+        }
     }
 
     public void SetActionDetails(string id, string description)
@@ -39,6 +69,8 @@ public class CameraCapture : MonoBehaviour
 
     public void CaptureAction()
     {
+        // Check if NativeCamera is available
+#if UNITY_ANDROID || UNITY_IOS
         PermissionStatus permissionStatus = (PermissionStatus)NativeCamera.CheckPermission(true);
         if (permissionStatus == PermissionStatus.Denied)
         {
@@ -58,11 +90,49 @@ public class CameraCapture : MonoBehaviour
             // Process and save the image
             ProcessActionPhoto(path);
         }, maxSize: 1024, saveAsJPEG: true);
+#else
+        Debug.Log("Camera capture simulated in Editor");
+        SimulateCameraCapture();
+#endif
+    }
+
+    private void SimulateCameraCapture()
+    {
+        Debug.Log("Eco action captured (simulated)");
+
+        Texture2D mockTexture = new Texture2D(512, 512);
+        Color[] colors = new Color[512 * 512];
+        for (int i = 0; i < colors.Length; i++)
+        {
+            colors[i] = new Color(
+                Random.Range(0.0f, 1.0f),
+                Random.Range(0.5f, 1.0f), 
+                Random.Range(0.0f, 0.5f)
+            );
+        }
+        mockTexture.SetPixels(colors);
+        mockTexture.Apply();
+
+        currentPhotoTexture = mockTexture;
+
+        Sprite photoSprite = Sprite.Create(
+            currentPhotoTexture,
+            new Rect(0, 0, currentPhotoTexture.width, currentPhotoTexture.height),
+            new Vector2(0.5f, 0.5f)
+        );
+
+        photoDisplayImage.sprite = photoSprite;
+        SecondPhotoDisplayImage.sprite = photoSprite;
+
+        string mockPath = Path.Combine(Application.persistentDataPath, "mock_eco_action_" + actionId + ".jpg");
+        File.WriteAllBytes(mockPath, currentPhotoTexture.EncodeToPNG());
+        currentPhotoPath = mockPath;
+
+        AwardPointsForAction();
     }
 
     private void ProcessActionPhoto(string path)
     {
-        // Load the image from the path
         currentPhotoTexture = NativeCamera.LoadImageAtPath(path, maxSize: 1024);
         if (currentPhotoTexture == null)
         {
@@ -70,7 +140,6 @@ public class CameraCapture : MonoBehaviour
             return;
         }
 
-        // Display the image
         Sprite photoSprite = Sprite.Create(
             currentPhotoTexture,
             new Rect(0, 0, currentPhotoTexture.width, currentPhotoTexture.height),
@@ -79,25 +148,50 @@ public class CameraCapture : MonoBehaviour
         photoDisplayImage.sprite = photoSprite;
         SecondPhotoDisplayImage.sprite = photoSprite;
 
-        // Save locally with action ID in filename
         SavePhotoLocally(path);
 
-        // Update PlayFab with photo information
+        AwardPointsForAction();
+    }
+
+    private void AwardPointsForAction()
+    {
+        bool alreadyCompleted = PlayerPrefs.HasKey("EcoAction_" + actionId + "_Completed");
+
+        if (!alreadyCompleted)
+        {
+            PlayerPrefs.SetInt("EcoAction_" + actionId + "_Completed", 1);
+            PlayerPrefs.Save();
+
+            if (PlayFabAuthManager.Instance != null)
+            {
+                PlayFabAuthManager.Instance.AddPoints(pointsPerAction);
+                PlayFabAuthManager.Instance.CompleteChallenge();
+
+                UpdateUI();
+            }
+            else
+            {
+                Debug.LogError("PlayFabAuthManager instance not found, cannot award points!");
+            }
+
+            Debug.Log("Awarded " + pointsPerAction + " point(s) for eco action " + actionId);
+        }
+        else
+        {
+            Debug.Log("This eco action was already completed before. No additional points awarded.");
+        }
+
         UpdatePhotoInfoInPlayFab();
-        points.text = (totalPoints+1)+" point(s)";
     }
 
     private void SavePhotoLocally(string originalPath)
     {
-        // Create a permanent local copy with the action ID in the filename
         string fileName = "eco_action_" + actionId + ".jpg";
         string destinationPath = Path.Combine(Application.persistentDataPath, fileName);
 
-        // Copy the file
         File.Copy(originalPath, destinationPath, true);
         currentPhotoPath = destinationPath;
 
-        // Store the path in PlayerPrefs for this action
         PlayerPrefs.SetString("EcoAction_" + actionId + "_PhotoPath", currentPhotoPath);
         PlayerPrefs.Save();
 
@@ -106,18 +200,15 @@ public class CameraCapture : MonoBehaviour
 
     private void LoadExistingPhoto()
     {
-        // Check if we have a stored path for this action
         string storedPath = PlayerPrefs.GetString("EcoAction_" + actionId + "_PhotoPath", "");
 
         if (!string.IsNullOrEmpty(storedPath) && File.Exists(storedPath))
         {
-            // Load the existing photo
             currentPhotoPath = storedPath;
             byte[] fileData = File.ReadAllBytes(storedPath);
             currentPhotoTexture = new Texture2D(2, 2);
             currentPhotoTexture.LoadImage(fileData);
 
-            // Create and display sprite
             Sprite photoSprite = Sprite.Create(
                 currentPhotoTexture,
                 new Rect(0, 0, currentPhotoTexture.width, currentPhotoTexture.height),
@@ -130,20 +221,17 @@ public class CameraCapture : MonoBehaviour
 
     private void UpdatePhotoInfoInPlayFab()
     {
-        // Get the timestamp when the photo was taken
         System.DateTime captureTime = System.DateTime.UtcNow;
         string timestamp = captureTime.ToString("yyyy-MM-dd HH:mm:ss");
 
-        // We'll store metadata about the photo instead of the photo itself
         var updateRequest = new UpdateUserDataRequest
         {
             Data = new Dictionary<string, string>
             {
-                // Store action metadata
+                // Store metadata
                 {"EcoAction_" + actionId + "_HasPhoto", "true"},
                 {"EcoAction_" + actionId + "_PhotoTimestamp", timestamp},
-                {"EcoAction_" + actionId + "_PhotoLocalPath", currentPhotoPath},
-                {"TotalPoints", (totalPoints +1).ToString()}
+                {"EcoAction_" + actionId + "_PhotoLocalPath", currentPhotoPath}
             }
         };
 
@@ -156,21 +244,17 @@ public class CameraCapture : MonoBehaviour
         });
     }
 
-    // You can add a method to sync all photos if the user reinstalls the app
+    // Method to sync all photos if the user reinstalls the app
     public void SyncPhotosFromPlayFab()
     {
         PlayFabClientAPI.GetUserData(new GetUserDataRequest(),
         result => {
-            // Look for all eco action photo data
             foreach (var item in result.Data)
             {
                 if (item.Key.StartsWith("EcoAction_") && item.Key.EndsWith("_HasPhoto"))
                 {
                     string actionId = item.Key.Replace("EcoAction_", "").Replace("_HasPhoto", "");
                     Debug.Log("Found photo data for action: " + actionId);
-
-                    // You would implement logic here to handle downloaded photos
-                    // This might involve downloading from your own server if needed
                 }
             }
         },
