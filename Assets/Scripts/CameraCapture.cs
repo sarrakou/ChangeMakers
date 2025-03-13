@@ -44,8 +44,12 @@ public class CameraCapture : MonoBehaviour
         {
             Debug.LogError("LocationValidator no esta asignado pero se requiere validacion de ubicacion");
             locationStatusText.text = "Error: Validador de ubicaci�n no configurado";
+                
         }
+        
+        
     }
+
 
     private void OnEnable()
     {
@@ -94,7 +98,6 @@ public class CameraCapture : MonoBehaviour
                 if (locationStatusText != null)
                 {
                     locationStatusText.text = "�Ubicaci�n inv�lida! Debes estar en el lugar espec�fico.";
-                    locationStatusText.color = Color.red;
                 }
                 return; // No continuar con la captura
             }

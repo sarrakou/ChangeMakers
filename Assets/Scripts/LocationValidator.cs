@@ -14,6 +14,10 @@ public class LocationValidator : MonoBehaviour
     [SerializeField] private TMP_Text locationStatusText;
     [SerializeField] private TMP_Text debugInfoText;
     [SerializeField] private bool showDebugInfo = true;
+    [SerializeField] public Button buttonTakePicture;
+
+    [SerializeField] private InfoActionsChallenges infoActions;
+
 
     private bool isLocationServiceRunning = false;
     private bool isLocationValid = false;
@@ -107,6 +111,15 @@ public class LocationValidator : MonoBehaviour
                     $"Ubicación INVÁLIDA ({lastDistanceToTarget:F0}m)";
                 UpdateStatusText(statusText);
 
+                if(isLocationValid || !infoActions.requireLocationValidation)
+                {
+                    buttonTakePicture.enabled = true;
+                }
+                else 
+                {
+                    buttonTakePicture.enabled= false;
+                }
+
                 // Mostrar información de depuración
                 if (showDebugInfo && debugInfoText != null)
                 {
@@ -130,11 +143,15 @@ public class LocationValidator : MonoBehaviour
 
     private void UpdateStatusText(string text)
     {
-        if (locationStatusText != null)
+        if (infoActions.requireLocationValidation)
         {
-            locationStatusText.text = text;
-            Debug.Log("[LocationValidator] " + text);
+            if (locationStatusText != null)
+            {
+                locationStatusText.text = text;
+                Debug.Log("[LocationValidator] " + text);
+            }
         }
+        
     }
 
     // Método público para validar la ubicación actual
