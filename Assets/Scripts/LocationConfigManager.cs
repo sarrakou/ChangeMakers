@@ -1,57 +1,77 @@
 using UnityEngine;
 using System.Collections.Generic;
+using TMPro;
+using UnityEngine.UI;
 
 [System.Serializable]
-public class LocationConfig
+public class ActionLocation
 {
     public string actionId;
     public string actionName;
     public float latitude;
     public float longitude;
-    public float radiusInMeters = 50f;
+    public float radiusInMeters = 2000f; 
+    public Button actionButton;
 }
 
 public class LocationConfigManager : MonoBehaviour
 {
-    [SerializeField] private List<LocationConfig> locationConfigs = new List<LocationConfig>();
+    [SerializeField] private List<ActionLocation> actionLocations = new List<ActionLocation>();
     [SerializeField] private LocationValidator locationValidator;
     [SerializeField] private CameraCapture cameraCapture;
+    [SerializeField] private TMP_Text debugText;
 
     private void Start()
     {
         if (locationValidator == null || cameraCapture == null)
         {
-            Debug.LogError("Referencias faltantes en LocationConfigManager");
+            Debug.LogError("Referencias faltantes en ActionLocationManager");
             return;
+        }
+
+        // Configurar listeners para cada botón
+        foreach (var action in actionLocations)
+        {
+            if (action.actionButton != null)
+            {                
+                action.actionButton.onClick.RemoveAllListeners();
+                
+                action.actionButton.onClick.AddListener(() => SelectAction(action.actionId));
+            }
         }
     }
 
     // Método para seleccionar una acción y configurar su ubicación
     public void SelectAction(string actionId)
     {
-        // Buscar la configuración de ubicación para esta acción
-        LocationConfig config = locationConfigs.Find(c => c.actionId == actionId);
+        ActionLocation selectedAction = actionLocations.Find(a => a.actionId == actionId);
 
-        if (config != null)
+        if (selectedAction != null)
         {
-            // Configurar el validador de ubicación
-            SetLocationTarget(config.latitude, config.longitude, config.radiusInMeters);
+            
+            SetLocationValidatorTarget(selectedAction.latitude, selectedAction.longitude, selectedAction.radiusInMeters);
 
-            // Configurar la descripción de la acción
-            cameraCapture.SetActionDetails(actionId, config.actionName);
+            
+            cameraCapture.SetActionDetails(actionId, selectedAction.actionName);
 
-            Debug.Log($"Acción configurada: {config.actionName} en ubicación: {config.latitude}, {config.longitude}");
+            
+            Debug.Log($"Acción seleccionada: {selectedAction.actionName} en {selectedAction.latitude}, {selectedAction.longitude}, radio: {selectedAction.radiusInMeters}m");
+
+            if (debugText != null)
+            {
+                debugText.text = $"Acción: {selectedAction.actionName}\nUbicación: {selectedAction.latitude}, {selectedAction.longitude}\nRadio: {selectedAction.radiusInMeters}m";
+            }
         }
         else
         {
-            Debug.LogWarning($"No se encontró configuración de ubicación para la acción: {actionId}");
+            Debug.LogWarning($"No se encontró la acción con ID: {actionId}");
         }
     }
 
-    // Configurar manualmente una ubicación objetivo
-    public void SetLocationTarget(float latitude, float longitude, float radius)
+    // Método para establecer ubicación en el validador
+    private void SetLocationValidatorTarget(float latitude, float longitude, float radius)
     {
-        // Accedemos a las variables privadas usando reflection
+        
         var latField = locationValidator.GetType().GetField("targetLatitude",
             System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
@@ -66,28 +86,13 @@ public class LocationConfigManager : MonoBehaviour
             latField.SetValue(locationValidator, latitude);
             lonField.SetValue(locationValidator, longitude);
             radiusField.SetValue(locationValidator, radius);
-
-            Debug.Log($"Ubicación objetivo configurada: {latitude}, {longitude}, radio: {radius}m");
         }
         else
         {
-            Debug.LogError("No se pudieron configurar los campos de ubicación objetivo");
+            
+            locationValidator.SetTargetLocation(latitude, longitude, radius);
         }
     }
-
-    // Editor helper para mostrar ubicaciones en el inspector
-#if UNITY_EDITOR
-    [ContextMenu("Añadir ubicación de ejemplo")]
-    private void AddExampleLocation()
-    {
-        locationConfigs.Add(new LocationConfig
-        {
-            actionId = "action_" + locationConfigs.Count,
-            actionName = "Acción Eco " + locationConfigs.Count,
-            latitude = 48.8476855f,  // París como ejemplo
-            longitude = 2.3872314f,
-            radiusInMeters = 2000f
-        });
-    }
-#endif
 }
+
+   

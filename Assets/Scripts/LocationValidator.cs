@@ -1,25 +1,23 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.IO;
-using PlayFab;
-using PlayFab.ClientModels;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using UnityEngine.Android;
 
 public class LocationValidator : MonoBehaviour
 {
     [Header("Configuración de ubicación")]
-    [SerializeField] private float targetLatitude = 0f;
-    [SerializeField] private float targetLongitude = 0f;
-    [SerializeField] private float acceptableDistanceInMeters = 50f;
+    [SerializeField] private float targetLatitude = 48.84769f; // París
+    [SerializeField] private float targetLongitude = 2.387231f;
+    [SerializeField] private float acceptableDistanceInMeters = 2000f;
 
     [Header("UI")]
     [SerializeField] private TMP_Text locationStatusText;
+    [SerializeField] private TMP_Text debugInfoText;
+    [SerializeField] private bool showDebugInfo = true;
 
     private bool isLocationServiceRunning = false;
     private bool isLocationValid = false;
+    private float lastDistanceToTarget = 0f;
 
     private void Start()
     {
@@ -28,40 +26,39 @@ public class LocationValidator : MonoBehaviour
 
     private IEnumerator StartLocationServices()
     {
+        // Mostrar mensaje de inicio
+        UpdateStatusText("Iniciando servicios de ubicación...");
+
         // Verificar si los servicios de ubicación están habilitados
         if (!Input.location.isEnabledByUser)
         {
             // Solicitar permisos según la plataforma
 #if PLATFORM_ANDROID
-            if (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
+            if (!UnityEngine.Android.Permission.HasUserAuthorizedPermission(UnityEngine.Android.Permission.FineLocation))
             {
-                Permission.RequestUserPermission(Permission.FineLocation);
-                yield return new WaitForSeconds(0.5f);
+                UpdateStatusText("Solicitando permisos de ubicación...");
+                UnityEngine.Android.Permission.RequestUserPermission(UnityEngine.Android.Permission.FineLocation);
+                yield return new WaitForSeconds(1f);
             }
 #endif
-
-            // Esperar a que el usuario conceda los permisos
-            yield return new WaitForSeconds(1f);
 
             // Verificar nuevamente si los permisos fueron concedidos
             if (!Input.location.isEnabledByUser)
             {
-                Debug.LogWarning("El usuario no ha habilitado los servicios de ubicación");
-                if (locationStatusText != null)
-                    locationStatusText.text = "Ubicación: Desactivada";
+                UpdateStatusText("ERROR: Permisos de ubicación denegados");
                 yield break;
             }
         }
 
         // Iniciar el servicio de ubicación
-        Input.location.Start(5f, 10f); // Precisión de 5 metros, actualización cada 10 metros
+        UpdateStatusText("Iniciando servicio GPS...");
+        Input.location.Start(1f, 0.1f); // Mayor precisión y frecuencia de actualización
 
         // Esperar a que el servicio se inicie
         int maxWait = 20;
         while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
         {
-            if (locationStatusText != null)
-                locationStatusText.text = "Ubicación: Iniciando...";
+            UpdateStatusText($"Inicializando GPS... ({maxWait}s)");
             yield return new WaitForSeconds(1f);
             maxWait--;
         }
@@ -69,22 +66,19 @@ public class LocationValidator : MonoBehaviour
         // Verificar si el servicio se inició correctamente
         if (maxWait <= 0)
         {
-            Debug.LogWarning("Tiempo de espera agotado para iniciar el servicio de ubicación");
-            if (locationStatusText != null)
-                locationStatusText.text = "Ubicación: Error de tiempo";
+            UpdateStatusText("ERROR: Tiempo de espera agotado");
             yield break;
         }
 
         if (Input.location.status == LocationServiceStatus.Failed)
         {
-            Debug.LogWarning("No se pudo determinar la ubicación del dispositivo");
-            if (locationStatusText != null)
-                locationStatusText.text = "Ubicación: Error";
+            UpdateStatusText("ERROR: Fallo en servicios de ubicación");
             yield break;
         }
 
+        // Servicio iniciado correctamente
         isLocationServiceRunning = true;
-        Debug.Log("Servicio de ubicación iniciado correctamente");
+        UpdateStatusText("GPS activado correctamente");
 
         // Empezar a verificar la ubicación
         StartCoroutine(UpdateLocationStatus());
@@ -94,27 +88,52 @@ public class LocationValidator : MonoBehaviour
     {
         while (isLocationServiceRunning)
         {
-            // Obtener la ubicación actual
-            float currentLatitude = Input.location.lastData.latitude;
-            float currentLongitude = Input.location.lastData.longitude;
-            float currentAccuracy = Input.location.lastData.horizontalAccuracy;
-
-            // Calcular la distancia al objetivo
-            float distanceToTarget = CalculateDistance(currentLatitude, currentLongitude, targetLatitude, targetLongitude);
-
-            // Verificar si está dentro del radio aceptable
-            isLocationValid = distanceToTarget <= acceptableDistanceInMeters;
-
-            // Actualizar UI si existe
-            if (locationStatusText != null)
+            if (Input.location.status == LocationServiceStatus.Running)
             {
+                // Obtener la ubicación actual
+                float currentLatitude = Input.location.lastData.latitude;
+                float currentLongitude = Input.location.lastData.longitude;
+                float currentAccuracy = Input.location.lastData.horizontalAccuracy;
+
+                // Calcular la distancia al objetivo
+                lastDistanceToTarget = CalculateDistance(currentLatitude, currentLongitude, targetLatitude, targetLongitude);
+
+                // Verificar si está dentro del radio aceptable
+                isLocationValid = lastDistanceToTarget <= acceptableDistanceInMeters;
+
+                // Actualizar texto de estado
                 string statusText = isLocationValid ?
-                    $"Ubicación válida ({distanceToTarget:F0}m)" :
-                    $"Ubicación inválida ({distanceToTarget:F0}m)";
-                locationStatusText.text = statusText;
+                    $"Ubicación VÁLIDA ({lastDistanceToTarget:F0}m)" :
+                    $"Ubicación INVÁLIDA ({lastDistanceToTarget:F0}m)";
+                UpdateStatusText(statusText);
+
+                // Mostrar información de depuración
+                if (showDebugInfo && debugInfoText != null)
+                {
+                    string debugText = $"Ubicación actual: {currentLatitude:F6}, {currentLongitude:F6}\n" +
+                                      $"Precisión: {currentAccuracy:F1}m\n" +
+                                      $"Objetivo: {targetLatitude:F6}, {targetLongitude:F6}\n" +
+                                      $"Distancia: {lastDistanceToTarget:F1}m\n" +
+                                      $"Radio aceptable: {acceptableDistanceInMeters:F0}m\n" +
+                                      $"Estado: {(isLocationValid ? "VÁLIDO" : "INVÁLIDO")}";
+                    debugInfoText.text = debugText;
+                }
+            }
+            else
+            {
+                UpdateStatusText($"Estado GPS: {Input.location.status}");
             }
 
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(1f);
+        }
+    }
+
+    private void UpdateStatusText(string text)
+    {
+        if (locationStatusText != null)
+        {
+            locationStatusText.text = text;
+            Debug.Log("[LocationValidator] " + text);
         }
     }
 
@@ -128,10 +147,13 @@ public class LocationValidator : MonoBehaviour
         }
 
         // Actualizar validación antes de devolver el resultado
-        float currentLatitude = Input.location.lastData.latitude;
-        float currentLongitude = Input.location.lastData.longitude;
-        float distanceToTarget = CalculateDistance(currentLatitude, currentLongitude, targetLatitude, targetLongitude);
-        isLocationValid = distanceToTarget <= acceptableDistanceInMeters;
+        if (Input.location.status == LocationServiceStatus.Running)
+        {
+            float currentLatitude = Input.location.lastData.latitude;
+            float currentLongitude = Input.location.lastData.longitude;
+            lastDistanceToTarget = CalculateDistance(currentLatitude, currentLongitude, targetLatitude, targetLongitude);
+            isLocationValid = lastDistanceToTarget <= acceptableDistanceInMeters;
+        }
 
         return isLocationValid;
     }
@@ -139,10 +161,26 @@ public class LocationValidator : MonoBehaviour
     // Obtener la información actual de ubicación
     public LocationInfo GetCurrentLocation()
     {
-        if (!isLocationServiceRunning)
+        if (!isLocationServiceRunning || Input.location.status != LocationServiceStatus.Running)
             return default;
 
         return Input.location.lastData;
+    }
+
+    // Método público para establecer la ubicación objetivo
+    public void SetTargetLocation(float latitude, float longitude, float radius)
+    {
+        targetLatitude = latitude;
+        targetLongitude = longitude;
+        acceptableDistanceInMeters = radius;
+
+        Debug.Log($"Nueva ubicación objetivo: {latitude:F6}, {longitude:F6}, radio: {radius:F0}m");
+    }
+
+    // Método público para obtener la distancia actual al objetivo
+    public float GetDistanceToTarget()
+    {
+        return lastDistanceToTarget;
     }
 
     // Calcular la distancia entre dos puntos geográficos (fórmula de Haversine)
