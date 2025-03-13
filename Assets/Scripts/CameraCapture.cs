@@ -20,8 +20,8 @@ public class CameraCapture : MonoBehaviour
     [SerializeField] private TMP_Text pointsText;
     [SerializeField] private TMP_Text levelText;
     [SerializeField] private TMP_Text badgesText;
-    [SerializeField] private TMP_Text locationStatusText; 
-
+    [SerializeField] private TMP_Text locationStatusText;
+    [SerializeField] private TMP_Text welcomeText;
   
     [SerializeField] private LocationValidator locationValidator;     
 
@@ -30,6 +30,7 @@ public class CameraCapture : MonoBehaviour
     private Texture2D currentPhotoTexture;
 
     [SerializeField] private int pointsPerAction = 1;
+    [SerializeField] private ImpactTracker tracker;
 
     void Start()
     {
@@ -60,6 +61,7 @@ public class CameraCapture : MonoBehaviour
             levelText.text = "Niveau " + PlayFabAuthManager.Instance.Level;
             ProfileUsername.text = PlayFabAuthManager.Instance.Username;
             SettingsUsername.text = PlayFabAuthManager.Instance.Username;
+            welcomeText.text = "Welcome, " + PlayFabAuthManager.Instance.Username.Split(" ")[0] +" !";
 
             if (PlayFabAuthManager.Instance.Badges != null && PlayFabAuthManager.Instance.Badges.Count > 0)
             {
@@ -231,6 +233,9 @@ public class CameraCapture : MonoBehaviour
             if (PlayFabAuthManager.Instance != null)
             {
                 PlayFabAuthManager.Instance.AddPoints(pointsPerAction);
+
+                tracker.AddCO2(0.5f);  
+                tracker.AddWater(10f);   
                 PlayFabAuthManager.Instance.CompleteChallenge();
 
                 UpdateUI();
