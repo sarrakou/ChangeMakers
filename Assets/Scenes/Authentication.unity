@@ -966,6 +966,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e65997ebe38dcef44baa04042ecb7116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SignUpPseudo: {fileID: 1917125180}
   SignUpEmailField: {fileID: 1508434080}
   SignUpPasswordField: {fileID: 633383811}
   SignUpConfirmPasswordField: {fileID: 824006081}

@@ -8,6 +8,7 @@ using System;
 
 public class PlayFabAuthManager : MonoBehaviour
 {
+    [SerializeField] TMP_InputField SignUpPseudo;
     [SerializeField] TMP_InputField SignUpEmailField;
     [SerializeField] TMP_InputField SignUpPasswordField;
     [SerializeField] TMP_InputField SignUpConfirmPasswordField;
@@ -17,6 +18,7 @@ public class PlayFabAuthManager : MonoBehaviour
 
     [SerializeField] TMP_Text SignUpStatusText;
     [SerializeField] TMP_Text LogInStatusText;
+
     TMP_Text activeStatusText;
 
     [SerializeField] GameObject loginPanel;
@@ -28,6 +30,7 @@ public class PlayFabAuthManager : MonoBehaviour
     public static PlayFabAuthManager Instance { get; private set; }
 
     // User data
+    public string Username { get; private set; }
     public int TotalPoints { get; private set; }
     public int Level { get; private set; }
     public int CompletedChallenges { get; private set; }
@@ -53,6 +56,30 @@ public class PlayFabAuthManager : MonoBehaviour
     {
         PlayFabSettings.TitleId = titleId;
         ShowLoginPanel();
+    }
+
+    /// <summary>
+    /// Updates the user's username both locally and in PlayFab
+    /// </summary>
+    /// <param name="newUsername">The new username to set</param>
+    public void UpdateUsername(string newUsername)
+    {
+        // Update the local username
+        Username = newUsername;
+
+        // Update the username in PlayFab user data
+        var updateRequest = new UpdateUserDataRequest
+        {
+            Data = new Dictionary<string, string>
+            {
+                {"Username", Username}
+            }
+        };
+
+        PlayFabClientAPI.UpdateUserData(updateRequest,
+            result => { Debug.Log("Username updated in PlayFab user data"); },
+            error => { Debug.LogError("Failed to update username in user data: " + error.ErrorMessage); }
+        );
     }
 
     public void ShowLoginPanel()
@@ -81,7 +108,8 @@ public class PlayFabAuthManager : MonoBehaviour
         {
             Email = SignUpEmailField.text,
             Password = SignUpPasswordField.text,
-            RequireBothUsernameAndEmail = false
+            RequireBothUsernameAndEmail = false,
+            DisplayName = SignUpPseudo.text 
         };
 
         activeStatusText.text = "Création du compte...";
@@ -93,7 +121,11 @@ public class PlayFabAuthManager : MonoBehaviour
         var loginRequest = new LoginWithEmailAddressRequest
         {
             Email = LogInEmailField.text,
-            Password = LogInPasswordField.text
+            Password = LogInPasswordField.text,
+            InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
+            {
+                GetPlayerProfile = true
+            }
         };
 
         activeStatusText.text = "Connexion en cours...";
@@ -103,6 +135,7 @@ public class PlayFabAuthManager : MonoBehaviour
     void OnRegisterSuccess(RegisterPlayFabUserResult result)
     {
         activeStatusText.text = "Compte créé avec succès!";
+        Username = SignUpPseudo.text;
         InitializeUserData();
     }
 
@@ -142,6 +175,15 @@ public class PlayFabAuthManager : MonoBehaviour
     void OnLoginSuccess(LoginResult result)
     {
         activeStatusText.text = "Connexion réussie!";
+
+        if (result.InfoResultPayload != null &&
+            result.InfoResultPayload.PlayerProfile != null &&
+            !string.IsNullOrEmpty(result.InfoResultPayload.PlayerProfile.DisplayName))
+        {
+            Username = result.InfoResultPayload.PlayerProfile.DisplayName;
+            Debug.Log($"Logged in as: {Username}");
+        }
+
         GetUserData();
     }
 
@@ -192,10 +234,8 @@ public class PlayFabAuthManager : MonoBehaviour
     {
         TotalPoints += pointsToAdd;
 
-        // Check for level up and badge unlocks
         CheckForBadges();
 
-        // Update PlayFab with new values
         UpdateUserDataInPlayFab();
 
         Debug.Log($"Points added: {pointsToAdd}, New total: {TotalPoints}");
@@ -240,7 +280,6 @@ public class PlayFabAuthManager : MonoBehaviour
             AddBadge("Champion de la Terre");
         }
 
-        // Calculate level based on points (example: 10 points per level)
         int newLevel = (TotalPoints / 10) + 1;
         if (newLevel > Level)
         {
@@ -249,7 +288,6 @@ public class PlayFabAuthManager : MonoBehaviour
         }
     }
 
-    // Serializable class for badges
     [System.Serializable]
     private class BadgesData
     {
@@ -261,14 +299,12 @@ public class PlayFabAuthManager : MonoBehaviour
     {
         List<string> result = new List<string>();
 
-        // Return empty list for empty arrays
         if (json == "[]" || string.IsNullOrEmpty(json))
             return result;
 
         // Simple string parsing for non-nested JSON arrays
         if (json.StartsWith("[") && json.EndsWith("]"))
         {
-            // Remove brackets
             string content = json.Substring(1, json.Length - 2);
 
             // Handle empty array

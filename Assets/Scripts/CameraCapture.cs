@@ -13,6 +13,10 @@ public class CameraCapture : MonoBehaviour
     [SerializeField] private Image photoDisplayImage;
     [SerializeField] private Image SecondPhotoDisplayImage;
     [SerializeField] private TMP_Text actionDescriptionText;
+
+
+    [SerializeField] private TMP_Text ProfileUsername;
+    [SerializeField] private TMP_Text SettingsUsername;
     [SerializeField] private TMP_Text pointsText;
     [SerializeField] private TMP_Text levelText;
     [SerializeField] private TMP_Text badgesText;
@@ -54,6 +58,8 @@ public class CameraCapture : MonoBehaviour
         {
             pointsText.text = PlayFabAuthManager.Instance.TotalPoints + " point(s)";
             levelText.text = "Niveau " + PlayFabAuthManager.Instance.Level;
+            ProfileUsername.text = PlayFabAuthManager.Instance.Username;
+            SettingsUsername.text = PlayFabAuthManager.Instance.Username;
 
             if (PlayFabAuthManager.Instance.Badges != null && PlayFabAuthManager.Instance.Badges.Count > 0)
             {
