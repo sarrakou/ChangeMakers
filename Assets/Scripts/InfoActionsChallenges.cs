@@ -43,7 +43,7 @@ public class InfoActionsChallenges : MonoBehaviour
         UpdateUI("Apporter son propre sac ",
                  "Montre-toi en train d’utiliser un sac réutilisable pour faire tes courses.",
                  "sac_reutilisable",
-                 "Tu as participé à l'action Ramasser un déchet ",
+                 "Tu as participé à l'action Apporter son propre sac ",
                  " ");
 
         actionID = "ApporterSac";
@@ -55,7 +55,7 @@ public class InfoActionsChallenges : MonoBehaviour
         UpdateUI("Éteindre les lumières ",
                  "Prends une photo avant/après d’une pièce avec la lumière allumée puis éteinte.",
                  "lumiere",
-                 "Tu as participé à l'action Ramasser un déchet ",
+                 "Tu as participé à l'action Éteindre les lumières ",
                  " ");
 
         actionID = "EteindreLumiere";
@@ -67,7 +67,7 @@ public class InfoActionsChallenges : MonoBehaviour
         UpdateUI("Utiliser une gourde ",
                  "Montre ta gourde réutilisable remplie au lieu d'une bouteille en plastique.",
                  "gourde",
-                 "Tu as participé à l'action Ramasser un déchet ",
+                 "Tu as participé à l'action Utiliser une gourde ",
                  " ");
 
         actionID = "UtiliserGourde";
@@ -79,7 +79,7 @@ public class InfoActionsChallenges : MonoBehaviour
         UpdateUI("Prendre les transports en commun ou le vélo",
                  "Fais une photo de toi dans un bus, un métro, ou sur un vélo au lieu de la voiture.",
                  "velo",
-                 "Tu as participé à l'action Ramasser un déchet ",
+                 "Tu as participé à l'action Prendre les transports en commun ou le vélo ",
                  " ");
 
         actionID = "PrendreTransport";
@@ -91,7 +91,7 @@ public class InfoActionsChallenges : MonoBehaviour
         UpdateUI("Recycler correctement ",
                  "Prends une photo en train de jeter un déchet dans la bonne poubelle de tri.",
                  "recyclage",
-                 "Tu as participé à l'action Ramasser un déchet ",
+                 "Tu as participé à l'action Recycler correctement ",
                  " ");
 
         actionID = "Recycler";
