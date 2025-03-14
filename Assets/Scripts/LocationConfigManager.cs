@@ -29,7 +29,6 @@ public class LocationConfigManager : MonoBehaviour
             return;
         }
 
-        // Configurar listeners para cada botón
         foreach (var action in actionLocations)
         {
             if (action.actionButton != null)
@@ -41,7 +40,6 @@ public class LocationConfigManager : MonoBehaviour
         }
     }
 
-    // Método para seleccionar una acción y configurar su ubicación
     public void SelectAction(string actionId)
     {
         ActionLocation selectedAction = actionLocations.Find(a => a.actionId == actionId);
@@ -68,7 +66,7 @@ public class LocationConfigManager : MonoBehaviour
         }
     }
 
-    // Método para establecer ubicación en el validador
+    // establecer ubicacion en el validador
     private void SetLocationValidatorTarget(float latitude, float longitude, float radius)
     {
         

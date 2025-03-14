@@ -323,7 +323,6 @@ public class CameraCapture : MonoBehaviour
         System.DateTime captureTime = System.DateTime.UtcNow;
         string timestamp = captureTime.ToString("yyyy-MM-dd HH:mm:ss");
 
-        // Incluir informaci�n de ubicaci�n si est� disponible
         bool locationValid = false;
         float latitude = 0;
         float longitude = 0;
@@ -382,7 +381,6 @@ public class CameraCapture : MonoBehaviour
     }
 }
 
-// Clase para almacenar los metadatos de ubicaci�n de la foto
 [System.Serializable]
 public class PhotoLocationMetadata
 {
