@@ -6,7 +6,6 @@ using TMPro;
 
 public class InfoActionsChallenges : MonoBehaviour
 {
-    // Références aux éléments UI
     public TextMeshProUGUI titleText;
     public TextMeshProUGUI descriptionText; 
     public TextMeshProUGUI titleText1;
@@ -15,7 +14,6 @@ public class InfoActionsChallenges : MonoBehaviour
     public string actionID;
     public bool requireLocationValidation = false;
 
-    // Fonction pour mettre à jour l'UI avec une action
     private void UpdateUI(string title, string description, string imageName, string title1, string description1)
     {
         titleText.text = title;
@@ -25,7 +23,6 @@ public class InfoActionsChallenges : MonoBehaviour
         descriptionText1.text = description1;
     }
 
-    // Actions écoresponsables
     public void Action_RamasserDechet()
     {
         UpdateUI("Ramasser un déchet ",

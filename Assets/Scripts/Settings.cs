@@ -21,26 +21,22 @@ public class Settings : MonoBehaviour
     [SerializeField] private TMP_Text profileUsername;
     [SerializeField] private TMP_Text settingsUsername;
 
-    // Store original values to detect changes
     private string originalUsername;
     private string originalEmail;
 
     private void Start()
     {
-        // Load current user data
         LoadUserData();
     }
 
     private void LoadUserData()
     {
-        // Load username if PlayFabAuthManager exists
         if (PlayFabAuthManager.Instance != null && usernameInput != null)
         {
             originalUsername = PlayFabAuthManager.Instance.Username;
             usernameInput.text = originalUsername;
         }
 
-        // Get current email from PlayFab
         PlayFabClientAPI.GetAccountInfo(new GetAccountInfoRequest(),
             result => {
                 if (emailInput != null && result.AccountInfo != null &&
@@ -62,12 +58,10 @@ public class Settings : MonoBehaviour
     {
         bool hasChanges = false;
 
-        // Check if username has changed
         bool usernameChanged = usernameInput != null &&
                              !string.IsNullOrEmpty(usernameInput.text) &&
                              usernameInput.text != originalUsername;
 
-        // Check if email has changed
         bool emailChanged = emailInput != null &&
                           !string.IsNullOrEmpty(emailInput.text) &&
                           emailInput.text != originalEmail;
@@ -78,7 +72,6 @@ public class Settings : MonoBehaviour
             return;
         }
 
-        // Process changes one by one
         if (usernameChanged)
         {
             UpdateUsername(usernameInput.text);
@@ -106,7 +99,6 @@ public class Settings : MonoBehaviour
 
         PlayFabClientAPI.UpdateUserTitleDisplayName(updateDisplayNameRequest,
             result => {
-                // Update local username
                 if (PlayFabAuthManager.Instance != null)
                 {
                     PlayFabAuthManager.Instance.UpdateUsername(newUsername);
@@ -173,7 +165,6 @@ public class Settings : MonoBehaviour
 
     public void SendPasswordResetEmail()
     {
-        // Get the account email
         string userEmail = emailInput.text;
 
         if (string.IsNullOrEmpty(userEmail))
@@ -200,16 +191,13 @@ public class Settings : MonoBehaviour
 
     public void LogOut()
     {
-        // Clear PlayFab session
         PlayFabClientAPI.ForgetAllCredentials();
 
-        // Destroy the singleton instance
         if (PlayFabAuthManager.Instance != null)
         {
             Destroy(PlayFabAuthManager.Instance.gameObject);
         }
 
-        // Return to login scene
         SceneManager.LoadScene(loginSceneName);
     }
 
@@ -220,7 +208,6 @@ public class Settings : MonoBehaviour
         statusMessageText.text = message;
         statusMessageText.color = isError ? Color.red : Color.green;
 
-        // Log message to console as well
         if (isError)
             Debug.LogWarning(message);
         else

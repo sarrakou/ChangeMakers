@@ -26,7 +26,6 @@ public class PlayFabAuthManager : MonoBehaviour
 
     private string titleId = "122337";
 
-    // Static instance for easy access from other scripts
     public static PlayFabAuthManager Instance { get; private set; }
 
     // User data
@@ -39,7 +38,6 @@ public class PlayFabAuthManager : MonoBehaviour
 
     void Awake()
     {
-        // Singleton pattern
         if (Instance == null)
         {
             Instance = this;
@@ -64,10 +62,8 @@ public class PlayFabAuthManager : MonoBehaviour
     /// <param name="newUsername">The new username to set</param>
     public void UpdateUsername(string newUsername)
     {
-        // Update the local username
         Username = newUsername;
 
-        // Update the username in PlayFab user data
         var updateRequest = new UpdateUserDataRequest
         {
             Data = new Dictionary<string, string>
@@ -141,14 +137,12 @@ public class PlayFabAuthManager : MonoBehaviour
 
     void InitializeUserData()
     {
-        // Reset local data
         TotalPoints = 0;
         Level = 1;
         CompletedChallenges = 0;
         Badges = new List<string>();
         CreatedAt = DateTime.UtcNow;
 
-        // Create an empty JSON array for badges (simple approach)
         string badgesJson = "[]";
 
         var userDataRequest = new UpdateUserDataRequest
@@ -194,7 +188,6 @@ public class PlayFabAuthManager : MonoBehaviour
 
     void OnUserDataReceived(GetUserDataResult result)
     {
-        // Load user profile data
         if (result.Data != null)
         {
             if (result.Data.ContainsKey("TotalPoints"))
@@ -214,7 +207,6 @@ public class PlayFabAuthManager : MonoBehaviour
 
             if (result.Data.ContainsKey("Badges"))
             {
-                // Parse badges from JSON string array
                 string badgesJson = result.Data["Badges"].Value;
                 Badges = ParseStringArray(badgesJson);
             }
@@ -259,7 +251,6 @@ public class PlayFabAuthManager : MonoBehaviour
 
     public void CheckForBadges()
     {
-        // Define badge thresholds
         if (TotalPoints >= 2 && !Badges.Contains("Débutant"))
         {
             AddBadge("Débutant");
@@ -304,7 +295,6 @@ public class PlayFabAuthManager : MonoBehaviour
         public List<string> badges = new List<string>();
     }
 
-    // Helper method to parse a JSON array of strings
     private List<string> ParseStringArray(string json)
     {
         List<string> result = new List<string>();
@@ -312,16 +302,13 @@ public class PlayFabAuthManager : MonoBehaviour
         if (json == "[]" || string.IsNullOrEmpty(json))
             return result;
 
-        // Simple string parsing for non-nested JSON arrays
         if (json.StartsWith("[") && json.EndsWith("]"))
         {
             string content = json.Substring(1, json.Length - 2);
 
-            // Handle empty array
             if (string.IsNullOrWhiteSpace(content))
                 return result;
 
-            // Split by commas, but handle quoted strings properly
             bool inQuotes = false;
             int startPos = 0;
 
@@ -329,15 +316,12 @@ public class PlayFabAuthManager : MonoBehaviour
             {
                 char c = content[i];
 
-                // Toggle quote state
                 if (c == '\"')
                     inQuotes = !inQuotes;
 
-                // Process comma if not in quotes
                 if (c == ',' && !inQuotes)
                 {
                     string item = content.Substring(startPos, i - startPos).Trim();
-                    // Remove surrounding quotes
                     if (item.StartsWith("\"") && item.EndsWith("\""))
                         item = item.Substring(1, item.Length - 2);
 
@@ -346,11 +330,9 @@ public class PlayFabAuthManager : MonoBehaviour
                 }
             }
 
-            // Add the last item
             if (startPos < content.Length)
             {
                 string item = content.Substring(startPos).Trim();
-                // Remove surrounding quotes
                 if (item.StartsWith("\"") && item.EndsWith("\""))
                     item = item.Substring(1, item.Length - 2);
 
@@ -363,8 +345,6 @@ public class PlayFabAuthManager : MonoBehaviour
 
     private void UpdateUserDataInPlayFab()
     {
-        // Create a simple JSON array of strings for badges
-        // This is a manual approach since JsonUtility doesn't handle lists directly
         string badgesJson = "[";
         for (int i = 0; i < Badges.Count; i++)
         {

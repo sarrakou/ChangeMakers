@@ -48,7 +48,6 @@ public class CameraCapture : MonoBehaviour
         PlayFabAuthManager.Instance.CheckForBadges();
         UpdateUI();
 
-        // Verificar componente de validaci�n
         if (infoActions.requireLocationValidation && locationValidator == null)
         {
             Debug.LogError("LocationValidator no esta asignado pero se requiere validacion de ubicacion");
@@ -145,7 +144,6 @@ public class CameraCapture : MonoBehaviour
             }
         }
 
-        // Check if NativeCamera is available
 #if UNITY_ANDROID || UNITY_IOS
         PermissionStatus permissionStatus = (PermissionStatus)NativeCamera.CheckPermission(true);
         if (permissionStatus == PermissionStatus.Denied)
@@ -154,16 +152,13 @@ public class CameraCapture : MonoBehaviour
             return;
         }
 
-        // Open camera to take picture
         NativeCamera.TakePicture((path) => {
-            // User canceled taking a picture
             if (string.IsNullOrEmpty(path))
             {
                 Debug.Log("Eco action capture canceled");
                 return;
             }
 
-            // Process and save the image
             ProcessActionPhoto(path);
         }, maxSize: 1024, saveAsJPEG: true);
 #else
@@ -376,7 +371,7 @@ public class CameraCapture : MonoBehaviour
         });
     }
 
-    // Method to sync all photos if the user reinstalls the app
+    //sync all photos if the user reinstalls the app
     public void SyncPhotosFromPlayFab()
     {
         PlayFabClientAPI.GetUserData(new GetUserDataRequest(),

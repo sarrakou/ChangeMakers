@@ -174,7 +174,6 @@ public static class NativeCamera
 
 	public static Permission RequestPermission( bool isPicturePermission )
 	{
-		// Don't block the main thread if the permission is already granted
 		if( CheckPermission( isPicturePermission ) == Permission.Granted )
 			return Permission.Granted;
 
