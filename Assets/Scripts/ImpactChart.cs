@@ -11,13 +11,7 @@ public class ImpactChart : MonoBehaviour
 {
     [Header("Referencias UI")]
     [SerializeField] private RectTransform graphContainer;
-    [SerializeField] private GameObject linePrefab;
     [SerializeField] private GameObject pointPrefab;
-    [SerializeField] private TMP_Text titleText;
-    [SerializeField] private TMP_Text xAxisLabel;
-    [SerializeField] private TMP_Text yAxisLabel;
-    [SerializeField] private GameObject yLabelPrefab;
-    [SerializeField] private GameObject xLabelPrefab;
 
     [Header("Configuración")]
     [SerializeField] private Color co2LineColor = new Color(0.8f, 0.2f, 0.2f);
@@ -116,11 +110,6 @@ public class ImpactChart : MonoBehaviour
             return;
         }
 
-        // Establecer título y etiquetas
-        if (titleText != null) titleText.text = "Impacto Ambiental";
-        if (xAxisLabel != null) xAxisLabel.text = "Days";
-        if (yAxisLabel != null) yAxisLabel.text = showWater && showCO2 ? "Kg / Litres" : showCO2 ? "Kg CO2" : "Litres";
-
         // Encontrar valores máximos para escala
         float maxValue = 0;
         if (showCO2) maxValue = Mathf.Max(maxValue, dailyData.Max(d => d.co2Value));
@@ -133,72 +122,20 @@ public class ImpactChart : MonoBehaviour
         float graphHeight = graphContainer.rect.height;
         float graphWidth = graphContainer.rect.width;
 
-        // Añadir etiquetas del eje Y (escala)
-        CreateYLabels(maxValue, graphHeight);
-
-        // Añadir etiquetas del eje X (fechas)
-        CreateXLabels(graphWidth);
 
         // Dibujar líneas de datos
         if (showCO2) CreateLine(dailyData.Select(d => d.co2Value).ToList(), maxValue, co2LineColor);
         if (showWater) CreateLine(dailyData.Select(d => d.waterValue).ToList(), maxValue, waterLineColor);
     }
 
-    private void CreateYLabels(float maxValue, float graphHeight)
-    {
-        // Crear 5 etiquetas en el eje Y
-        int labelCount = 5;
-        for (int i = 0; i <= labelCount; i++)
-        {
-            if (yLabelPrefab != null)
-            {
-                float normalizedValue = (float)i / labelCount;
-                GameObject labelObj = Instantiate(yLabelPrefab, graphContainer);
-                graphElements.Add(labelObj);
-
-                RectTransform labelRT = labelObj.GetComponent<RectTransform>();
-                labelRT.anchoredPosition = new Vector2(-300f, normalizedValue * graphHeight);
-
-                TMP_Text labelText = labelObj.GetComponent<TMP_Text>();
-                if (labelText != null)
-                {
-                    labelText.text = Mathf.RoundToInt(maxValue * normalizedValue).ToString();
-                }
-            }
-        }
-    }
-
-    private void CreateXLabels(float graphWidth)
-    {
-        if (xLabelPrefab == null || dailyData.Count == 0) return;
-
-        // Mostrar etiquetas de fecha en el eje X (reducidas para no saturar)
-        int step = Mathf.Max(1, dailyData.Count / 5);
-        for (int i = 0; i < dailyData.Count; i += step)
-        {
-            GameObject labelObj = Instantiate(xLabelPrefab, graphContainer);
-            graphElements.Add(labelObj);
-
-            float normalizedX = (float)i / (dailyData.Count - 1);
-            RectTransform labelRT = labelObj.GetComponent<RectTransform>();
-            labelRT.anchoredPosition = new Vector2(normalizedX * graphWidth, -300f);
-
-            TMP_Text labelText = labelObj.GetComponent<TMP_Text>();
-            if (labelText != null)
-            {
-                labelText.text = dailyData[i].date.ToString("dd/MM");
-            }
-        }
-    }
-
     private void CreateLine(List<float> values, float maxValue, Color lineColor)
     {
-        if (values.Count < 2 || linePrefab == null || pointPrefab == null) return;
+        if (values.Count < 2 || pointPrefab == null) return;
 
         float graphHeight = graphContainer.rect.height;
         float graphWidth = graphContainer.rect.width;
 
-        // Crear puntos y conectarlos con líneas
+        // Crear puntos
         List<Vector2> points = new List<Vector2>();
 
         for (int i = 0; i < values.Count; i++)
@@ -224,33 +161,9 @@ public class ImpactChart : MonoBehaviour
             }
         }
 
-        // Crear líneas entre puntos
-        for (int i = 0; i < points.Count - 1; i++)
-        {
-            // Crear línea entre puntos
-            GameObject lineObj = Instantiate(linePrefab, graphContainer);
-            graphElements.Add(lineObj);
-            RectTransform lineRT = lineObj.GetComponent<RectTransform>();
-
-            // Posicionar y rotar línea
-            Vector2 startPoint = points[i];
-            Vector2 endPoint = points[i + 1];
-            Vector2 direction = (endPoint - startPoint).normalized;
-            float distance = Vector2.Distance(startPoint, endPoint);
-
-            lineRT.anchoredPosition = startPoint;
-            lineRT.sizeDelta = new Vector2(distance, 2f); // Grosor de línea = 2
-            lineRT.localEulerAngles = new Vector3(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
-
-            // Colorear línea
-            if (lineObj.TryGetComponent<Image>(out var image))
-            {
-                image.color = lineColor;
-            }
-        }
     }
 
-    private void ClearGraph()
+    public void ClearGraph()
     {
         foreach (GameObject element in graphElements)
         {
@@ -325,8 +238,8 @@ public class ImpactChart : MonoBehaviour
         for (int i = 0; i < 30; i++)
         {
             // Crear tendencia ascendente con algo de variación aleatoria
-            float co2Value = i * 0.5f + UnityEngine.Random.Range(-0.3f, 0.3f);
-            float waterValue = i * 3.0f + UnityEngine.Random.Range(-2f, 2f);
+            float co2Value = i + UnityEngine.Random.Range(-2f, 2f);
+            float waterValue = i + UnityEngine.Random.Range(-2f, 2f);
 
             // Asegurar valores positivos
             co2Value = Mathf.Max(0.1f, co2Value);
