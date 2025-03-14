@@ -257,25 +257,35 @@ public class PlayFabAuthManager : MonoBehaviour
         }
     }
 
-    private void CheckForBadges()
+    public void CheckForBadges()
     {
         // Define badge thresholds
-        if (TotalPoints >= 5 && !Badges.Contains("Débutant"))
+        if (TotalPoints >= 2 && !Badges.Contains("Débutant"))
         {
             AddBadge("Débutant");
         }
 
-        if (TotalPoints >= 20 && !Badges.Contains("Apprenti"))
+        if (TotalPoints >= 5 && !Badges.Contains("Apprenti"))
         {
             AddBadge("Apprenti");
         }
 
-        if (TotalPoints >= 50 && !Badges.Contains("Écologiste"))
+        if (TotalPoints >= 8 && !Badges.Contains("Écologiste"))
         {
             AddBadge("Écologiste");
         }
 
-        if (TotalPoints >= 100 && !Badges.Contains("Champion de la Terre"))
+        if (TotalPoints >= 10 && !Badges.Contains("Éco-innovateur"))
+        {
+            AddBadge("Éco-innovateur");
+        }
+
+        if (TotalPoints >= 15 && !Badges.Contains("Défenseur"))
+        {
+            AddBadge("Défenseur");
+        }
+
+        if (TotalPoints >= 20 && !Badges.Contains("Champion de la Terre"))
         {
             AddBadge("Champion de la Terre");
         }

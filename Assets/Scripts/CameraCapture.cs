@@ -32,13 +32,24 @@ public class CameraCapture : MonoBehaviour
     [SerializeField] private int pointsPerAction = 1;
     [SerializeField] private ImpactTracker tracker;
 
+
+    [SerializeField] private Image imgDébutant;
+    [SerializeField] private Image imgApprenti;
+    [SerializeField] private Image imgEcologiste;
+    [SerializeField] private Image imgEcoInnov;
+    [SerializeField] private Image imgDéfenseur;
+    [SerializeField] private Image imgCDLT;
+
+    public TMP_Text test;
     void Start()
     {
         captureButton.onClick.AddListener(CaptureAction);
 
         LoadExistingPhoto();
 
+        PlayFabAuthManager.Instance.CheckForBadges();
         UpdateUI();
+        test.text = PlayFabAuthManager.Instance.TotalPoints+ "";
 
         // Verificar componente de validaci�n
         if (infoActions.requireLocationValidation && locationValidator == null)
@@ -51,12 +62,6 @@ public class CameraCapture : MonoBehaviour
         
     }
 
-
-    private void OnEnable()
-    {
-        UpdateUI();
-    }
-
     private void UpdateUI()
     {
         if (PlayFabAuthManager.Instance != null)
@@ -65,15 +70,48 @@ public class CameraCapture : MonoBehaviour
             levelText.text = "Niveau " + PlayFabAuthManager.Instance.Level;
             ProfileUsername.text = PlayFabAuthManager.Instance.Username;
             SettingsUsername.text = PlayFabAuthManager.Instance.Username;
-            welcomeText.text = "Welcome, " + PlayFabAuthManager.Instance.Username.Split(" ")[0] +" !";
 
-            if (PlayFabAuthManager.Instance.Badges != null && PlayFabAuthManager.Instance.Badges.Count > 0)
+            string firstName = PlayFabAuthManager.Instance.Username;
+            if (firstName.Contains(" "))
             {
-                badgesText.text = string.Join(", ", PlayFabAuthManager.Instance.Badges);
+                firstName = firstName.Split(' ')[0];
+                welcomeText.text = "Welcome, " + firstName + " !";
+            } else
+            {
+                welcomeText.text = "Welcome, " + PlayFabAuthManager.Instance.Username;
             }
-            else
+
+
+            List<string> earnedBadges = PlayFabAuthManager.Instance.Badges;
+
+            if (earnedBadges != null && earnedBadges.Count > 0)
             {
-                badgesText.text = "Aucun badge";
+                foreach (string badge in earnedBadges)
+                {
+                    switch (badge)
+                    {
+                        case "Débutant":
+                            imgDébutant.enabled = true;
+                            break;
+                        case "Apprenti":
+                            imgApprenti.enabled = true;
+                            break;
+                        case "Écologiste":
+                            imgEcologiste.enabled = true;
+                            break;
+                        case "Éco-innovateur":
+                            imgEcoInnov.enabled = true;
+                            break;
+                        case "Défenseur":
+                            imgDéfenseur.enabled = true;
+                            break;
+                        case "Champion de la Terre":
+                            imgCDLT.enabled = true;
+                            break;
+
+                    }
+
+                }
             }
         }
         else
