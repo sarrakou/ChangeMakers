@@ -39,8 +39,6 @@ public class CameraCapture : MonoBehaviour
     [SerializeField] private Image imgEcoInnov;
     [SerializeField] private Image imgDéfenseur;
     [SerializeField] private Image imgCDLT;
-
-    public TMP_Text test;
     void Start()
     {
         captureButton.onClick.AddListener(CaptureAction);
@@ -49,7 +47,6 @@ public class CameraCapture : MonoBehaviour
 
         PlayFabAuthManager.Instance.CheckForBadges();
         UpdateUI();
-        test.text = PlayFabAuthManager.Instance.TotalPoints+ "";
 
         // Verificar componente de validaci�n
         if (infoActions.requireLocationValidation && locationValidator == null)
@@ -60,6 +57,11 @@ public class CameraCapture : MonoBehaviour
         }
         
         
+    }
+
+    private void OnEnable()
+    {
+        UpdateUI();
     }
 
     private void UpdateUI()
@@ -208,7 +210,7 @@ public class CameraCapture : MonoBehaviour
         AwardPointsForAction();
     }
 
-    private void ProcessActionPhoto(string path)
+    public void ProcessActionPhoto(string path)
     {
         currentPhotoTexture = NativeCamera.LoadImageAtPath(path, maxSize: 1024);
         if (currentPhotoTexture == null)
@@ -262,7 +264,7 @@ public class CameraCapture : MonoBehaviour
         }
     }
 
-    private void AwardPointsForAction()
+    public void AwardPointsForAction()
     {
         bool alreadyCompleted = PlayerPrefs.HasKey("EcoAction_" + infoActions.actionID + "_Completed");
 
