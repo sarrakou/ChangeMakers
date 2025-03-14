@@ -3407,7 +3407,11 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
+<<<<<<< Updated upstream
   m_AnchoredPosition: {x: -30, y: -653}
+=======
+  m_AnchoredPosition: {x: -13, y: -515}
+>>>>>>> Stashed changes
   m_SizeDelta: {x: 450, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &215322683
@@ -6506,7 +6510,11 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.84621215}
   m_AnchorMax: {x: 0.5, y: 0.84621215}
+<<<<<<< Updated upstream
   m_AnchoredPosition: {x: -30, y: -161}
+=======
+  m_AnchoredPosition: {x: -13, y: -56}
+>>>>>>> Stashed changes
   m_SizeDelta: {x: 600, y: 54}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &452313501
@@ -7198,10 +7206,10 @@ RectTransform:
   - {fileID: 1870586758}
   m_Father: {fileID: 1047847232}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 100, y: -87.70285}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &475892722
 MonoBehaviour:
@@ -18626,7 +18634,11 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
+<<<<<<< Updated upstream
   m_AnchoredPosition: {x: 9.5, y: -720}
+=======
+  m_AnchoredPosition: {x: -13, y: -625.47705}
+>>>>>>> Stashed changes
   m_SizeDelta: {x: 1000, y: 550}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1192025740
@@ -19603,7 +19615,11 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
+<<<<<<< Updated upstream
   m_AnchoredPosition: {x: -39, y: -756}
+=======
+  m_AnchoredPosition: {x: -13, y: -633}
+>>>>>>> Stashed changes
   m_SizeDelta: {x: 600, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1265074792
@@ -22433,10 +22449,10 @@ RectTransform:
   - {fileID: 1015291570}
   m_Father: {fileID: 1047847232}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 900, y: -87.70285}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1509441778
 MonoBehaviour:
@@ -23845,6 +23861,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 577008801}
+        m_TargetAssemblyTypeName: CameraCapture, Assembly-CSharp
+        m_MethodName: AwardPointsForAction
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &1579207037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24994,7 +25022,11 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
+<<<<<<< Updated upstream
   m_AnchoredPosition: {x: -196, y: 319}
+=======
+  m_AnchoredPosition: {x: -218.5, y: 413.52295}
+>>>>>>> Stashed changes
   m_SizeDelta: {x: 500, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1680637098
@@ -25754,7 +25786,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1719933110
 RectTransform:
   m_ObjectHideFlags: 0
@@ -26033,7 +26065,11 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
+<<<<<<< Updated upstream
   m_AnchoredPosition: {x: -125.5, y: -388.00006}
+=======
+  m_AnchoredPosition: {x: -148, y: -293.4771}
+>>>>>>> Stashed changes
   m_SizeDelta: {x: 650, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1743332390
@@ -28468,10 +28504,10 @@ RectTransform:
   - {fileID: 74967777}
   m_Father: {fileID: 1047847232}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 500, y: -87.70285}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1947910712
 MonoBehaviour:
@@ -29215,7 +29251,11 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
+<<<<<<< Updated upstream
   m_AnchoredPosition: {x: 14, y: -21.000061}
+=======
+  m_AnchoredPosition: {x: -8.5, y: 73.52289}
+>>>>>>> Stashed changes
   m_SizeDelta: {x: 1000, y: 550}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2025638726

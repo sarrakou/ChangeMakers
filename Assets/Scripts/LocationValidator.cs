@@ -25,6 +25,7 @@ public class LocationValidator : MonoBehaviour
 
     private void Start()
     {
+        buttonTakePicture.enabled = true;
         StartCoroutine(StartLocationServices());
     }
 
