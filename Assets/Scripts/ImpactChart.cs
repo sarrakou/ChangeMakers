@@ -13,6 +13,7 @@ public class ImpactChart : MonoBehaviour
     [SerializeField] private RectTransform graphContainer;
     [SerializeField] private GameObject pointPrefab;
 
+
     [Header("Configuración")]
     [SerializeField] private Color co2LineColor = new Color(0.8f, 0.2f, 0.2f);
     [SerializeField] private Color waterLineColor = new Color(0.2f, 0.4f, 0.8f);

@@ -24,27 +24,19 @@ public class ImpactTracker : MonoBehaviour
     public void AddCO2(float amount)
     {
         co2Value += amount;
+        chart.AddDailyData(amount, 0);
         UpdateCO2Display();
         SaveValues();
-
-        // Actualizar gráfica
-        if (chart != null)
-        {
-            chart.AddDailyData(amount, 0);
-        }
+        
     }
 
     public void AddWater(float amount)
     {
         waterValue += amount;
+        chart.AddDailyData(0, amount);
         UpdateWaterDisplay();
         SaveValues();
-
-        // Actualizar gráfica
-        if (chart != null)
-        {
-            chart.AddDailyData(0, amount);
-        }
+        
     }
     private void Start()
     {
