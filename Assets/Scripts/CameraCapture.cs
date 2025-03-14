@@ -45,8 +45,6 @@ public class CameraCapture : MonoBehaviour
         
         
     }
-
-
     private void OnEnable()
     {
         UpdateUI();
