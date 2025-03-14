@@ -261,34 +261,25 @@ public class CameraCapture : MonoBehaviour
 
     public void AwardPointsForAction()
     {
-        bool alreadyCompleted = PlayerPrefs.HasKey("EcoAction_" + infoActions.actionID + "_Completed");
+        
+        PlayerPrefs.SetInt("EcoAction_" + infoActions.actionID + "_Completed", 1);
+        PlayerPrefs.Save();
 
-        if (!alreadyCompleted)
+        if (PlayFabAuthManager.Instance != null)
         {
-            PlayerPrefs.SetInt("EcoAction_" + infoActions.actionID + "_Completed", 1);
-            PlayerPrefs.Save();
+            PlayFabAuthManager.Instance.AddPoints(pointsPerAction);
 
-            if (PlayFabAuthManager.Instance != null)
-            {
-                PlayFabAuthManager.Instance.AddPoints(pointsPerAction);
+            tracker.AddCO2(0.5f);  
+            tracker.AddWater(10f);   
+            PlayFabAuthManager.Instance.CompleteChallenge();
 
-                tracker.AddCO2(0.5f);  
-                tracker.AddWater(10f);   
-                PlayFabAuthManager.Instance.CompleteChallenge();
-
-                UpdateUI();
-            }
-            else
-            {
-                Debug.LogError("PlayFabAuthManager instance not found, cannot award points!");
-            }
-
-            Debug.Log("Awarded " + pointsPerAction + " point(s) for eco action " + infoActions.actionID);
+            UpdateUI();
         }
         else
         {
-            Debug.Log("This eco action was already completed before. No additional points awarded.");
+            Debug.LogError("PlayFabAuthManager instance not found, cannot award points!");
         }
+
         UpdatePhotoInfoInPlayFab();
     }
 
