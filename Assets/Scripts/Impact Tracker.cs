@@ -19,32 +19,25 @@ public class ImpactTracker : MonoBehaviour
     private float waterValue = 0;
     // Agregar al principio de tu ImpactTracker.cs
     [SerializeField] private ImpactChart chart;
+    [SerializeField] private ImpactChart chart2;
 
     // Modificar tus métodos AddCO2 y AddWater
     public void AddCO2(float amount)
     {
         co2Value += amount;
+        chart2.AddDailyData(amount, 0);
         UpdateCO2Display();
         SaveValues();
-
-        // Actualizar gráfica
-        if (chart != null)
-        {
-            chart.AddDailyData(amount, 0);
-        }
+        
     }
 
     public void AddWater(float amount)
     {
         waterValue += amount;
+        chart.AddDailyData(0, amount);
         UpdateWaterDisplay();
         SaveValues();
-
-        // Actualizar gráfica
-        if (chart != null)
-        {
-            chart.AddDailyData(0, amount);
-        }
+        
     }
     private void Start()
     {
